@@ -17,15 +17,18 @@ class TweetsViewController: UIViewController, UITableViewDelegate, UITableViewDa
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        //instantiate the table view
         self.tableView.delegate = self
         self.tableView.dataSource = self
         self.tableView.rowHeight = UITableViewAutomaticDimension
         self.tableView.estimatedRowHeight = 170
         
+        //Change design and color of the view controller to make it look nicer
         let skyBlue = UIColor(red: 0.0, green: 172.0/255.0, blue: 237.0/255.0, alpha: 1.0)
         self.navigationController?.navigationBar.barTintColor = skyBlue
         self.navigationController?.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName: UIColor.white]
         
+        //Display the user's hometimeline unless error
         TwitterClient.sharedInstance?.homeTimeline(success: { (tweets: [Tweet]) -> () in
                 self.tweets = tweets
             
@@ -42,12 +45,15 @@ class TweetsViewController: UIViewController, UITableViewDelegate, UITableViewDa
         // Dispose of any resources that can be recreated.
     }
     
+    //Log the user out if pressed the log out button
     @IBAction func onLogoutButton(_ sender: Any) {
         TwitterClient.sharedInstance?.logout()
     }
 
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        
+        //display the total number of tweets in their own rows
         if let tweets = self.tweets {
             return tweets.count
         } else {
@@ -56,9 +62,15 @@ class TweetsViewController: UIViewController, UITableViewDelegate, UITableViewDa
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        
+        //Use reusable cell for tweets
         let cell: TweetsTableViewCell = self.tableView.dequeueReusableCell(withIdentifier: "TweetsTableViewCell", for: indexPath) as! TweetsTableViewCell
         
+        //Get desired tweet from indexPath.row
         let tweet = tweets[indexPath.row]
+        
+        //Instantiate the cell contents with that of the corresponding parts in the
+        //tweet
         cell.tweetAuthorUsername.text = tweet.username as String?
         cell.tweetTextLabel.text = tweet.text as String?
         cell.tweetTimestamp.text = tweet.timestamp as String?
@@ -69,31 +81,47 @@ class TweetsViewController: UIViewController, UITableViewDelegate, UITableViewDa
         
         return cell
     }
+    
+    //deselect the row once clicked on to make it look nicer
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
     }
     
     
     @IBAction func onRetweet(_ sender: Any) {
+        //Instantiate button, view, cell, and indexpath
         let button = sender as! UIButton
         let view = button.superview!
         let cell = view.superview as! TweetsTableViewCell
         let indexPath = tableView.indexPath(for: cell)
+        
+        //Increment retweetCount once user has tapped on retweet button
         self.tweets![indexPath!.row].retweetCount = self.tweets![indexPath!.row].retweetCount + 1
+        
+        //Set the retweet button image to green one to announce retweet
         let retweetImage = UIImage(named: "retweet-icon-green")
         cell.retweetButton.setImage(retweetImage, for: .normal)
+        
+        //reload data
         self.tableView.reloadData()
     }
     
     
     @IBAction func onFav(_ sender: Any) {
+        //instantiate the button, view, cell, and indexpath
         let button = sender as! UIButton
         let view = button.superview!
         let cell = view.superview as! TweetsTableViewCell
         let indexPath = tableView.indexPath(for: cell)
+        
+        //Incremenet favorites count once user has tapped on the favorite button
         self.tweets![indexPath!.row].favoritesCount = self.tweets![indexPath!.row].favoritesCount + 1
+        
+        //Set the favorite button image to the red one to announce fav
         let favImage = UIImage(named: "favor-icon-red")
         cell.favoriteButton.setImage(favImage, for: .normal)
+        
+        //reload data
         self.tableView.reloadData()
     }
     

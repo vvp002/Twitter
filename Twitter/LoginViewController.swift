@@ -25,12 +25,14 @@ class LoginViewController: UIViewController {
     
     @IBAction func onLoginButton(_ sender: Any) {
         
+        //Check success of login for user credentials
         TwitterClient.sharedInstance?.login(success: {
             print("I've logged in!")
             
             self.performSegue(withIdentifier: "loginSegue", sender: nil)
             
         }, failure: { (error: Error) in
+            //If failure, print out error
             print("Error: \(error.localizedDescription)")
         })
         

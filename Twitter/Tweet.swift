@@ -18,20 +18,26 @@ class Tweet: NSObject {
     var profilePhotoUrl: URL?
     
     init(dictionary: NSDictionary) {
+        //Set the text field to have the contents of the text in the tweet
         text = dictionary["text"] as? NSString
+        
+        //Instantiate the retweet Count and favoritesCount to 0
         retweetCount = (dictionary["retweet_count"] as? Int) ?? 0
         favoritesCount = (dictionary["favourites_count"] as? Int) ?? 0
+        
+        //Instatiante the username and user from a tweet
         let user = dictionary["user"] as! NSDictionary
         username = user["screenname"] as? NSString
         name = user["name"] as? NSString
-        let profileUrlString = user["profile_image_url_https"] as? String
         
+        //Set the profile image of the user
+        let profileUrlString = user["profile_image_url_https"] as? String
         if let profileUrlString = profileUrlString {
             profilePhotoUrl = URL(string: profileUrlString)
         }
         
+        //Set the timestamp of their tweet in format of MM/dd/yy
         let timestampString = dictionary["created_at"] as? NSString
-        
         if let timestampString = timestampString {
             let formatter = DateFormatter()
             formatter.dateFormat = "EEE MMM d HH:mm:ss Z y"
@@ -41,6 +47,7 @@ class Tweet: NSObject {
         }
     }
 
+    //Add a tweet to the [NSDictionary] so you can display any new tweets
     class func tweetsWithArray(dictionaries: [NSDictionary]) -> [Tweet]{
         var tweets = [Tweet]()
         

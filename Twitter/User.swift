@@ -19,15 +19,19 @@ class User: NSObject {
     
     
     init(dictionary: NSDictionary) {
+        //initialize the dictionary
         self.dictionary = dictionary
         
+        //Set the name and screenname for the author of the tweet
         name = dictionary["name"] as? NSString
         screenname = dictionary["screen_name"] as? NSString
         
+        //Set the profile picture for the author of the tweet
         let profileUrlString = dictionary["profile_image_url_https"] as? String
         if let profileUrlString = profileUrlString {
             profileUrl = URL(string: profileUrlString)
         }
+        //Set the tweet text to the description of the tweet
         tagline = dictionary["description"] as? NSString
     }
     
@@ -35,6 +39,7 @@ class User: NSObject {
     static let userDidLogoutNotification = "UserDidLogout"
     
     class var currentUser: User? {
+        //Get the information from current user that is logged in
         get {
             if _currentUser == nil {
             let defaults = UserDefaults.standard
@@ -50,6 +55,7 @@ class User: NSObject {
             return _currentUser
         }
         
+        //Set current information and data to that of new user that has signed in
         set(user) {
             _currentUser = user
             
