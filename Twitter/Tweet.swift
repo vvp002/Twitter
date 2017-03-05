@@ -16,6 +16,9 @@ class Tweet: NSObject {
     var retweetCount:Int = 0
     var favoritesCount:Int = 0
     var profilePhotoUrl: URL?
+    var favorited: Bool?
+    var retweeted: Bool?
+    var tweetID: Int?
     
     init(dictionary: NSDictionary) {
         //Set the text field to have the contents of the text in the tweet
