@@ -51,6 +51,7 @@ class TimelineViewController: UIViewController, UITableViewDelegate, UITableView
             profileImage.setImageWith(user.profileUrl! as URL)
         }
         
+        self.tableView.reloadData()
         // Do any additional setup after loading the view.
         
     }

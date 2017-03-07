@@ -13,6 +13,7 @@ class TweetsViewController: UIViewController, UITableViewDelegate, UITableViewDa
     @IBOutlet weak var tableView: UITableView!
     
     var tweets: [Tweet]!
+    var user: User!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -39,7 +40,7 @@ class TweetsViewController: UIViewController, UITableViewDelegate, UITableViewDa
             }, failure: { (error: Error) -> () in
             print("error: \(error.localizedDescription)")
         })
- 
+        self.tableView.reloadData()
 
     }
     
@@ -162,7 +163,7 @@ class TweetsViewController: UIViewController, UITableViewDelegate, UITableViewDa
             let cell = button?.superview?.superview as! UITableViewCell
             let indexPath = tableView.indexPath(for: cell)
             let tweet = tweets[(indexPath?.row)!]
-            vc.user = tweet.user
+            vc.user = User.currentUser
         }
         else if segue.identifier == "replySegue" {
             let vc = segue.destination as! ComposeTweetViewController

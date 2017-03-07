@@ -37,7 +37,7 @@ class ComposeTweetViewController: UIViewController, UITextViewDelegate {
         sendTweetButton.isEnabled = false
         
         
-        if let photoData = NSData(contentsOf: user.profileUrl! as URL) {
+        if NSData(contentsOf: user.profileUrl! as URL) != nil {
             profilePhoto.setImageFor(.normal, with: user.profileUrl! as URL)
         }
         
@@ -80,7 +80,7 @@ class ComposeTweetViewController: UIViewController, UITextViewDelegate {
                 self.tweetTextView.text = ""
                 self.tweetTextView.endEditing(true)
             })
-            let vc = segue.destination as! TimelineViewController
+            let vc = segue.destination as! TweetsViewController
             vc.user = user
             return
         }
