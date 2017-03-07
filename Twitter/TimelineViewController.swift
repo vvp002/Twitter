@@ -15,12 +15,18 @@ class TimelineViewController: UIViewController, UITableViewDelegate, UITableView
     @IBOutlet weak var tweetsLabel: UILabel!
     @IBOutlet weak var followersLabel: UILabel!
     @IBOutlet weak var nameLabel: UILabel!
+    @IBOutlet weak var navBar: UINavigationBar!
     var user: User!
     var tweets: [Tweet]!
     
     @IBOutlet weak var tableView: UITableView!
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        //Change design and color of the view controller to make it look nicer
+        let skyBlue = UIColor(red: 0.0, green: 172.0/255.0, blue: 237.0/255.0, alpha: 1.0)
+        navBar.barTintColor = skyBlue
+        navBar.titleTextAttributes = [NSForegroundColorAttributeName: UIColor.white]
         
         self.tableView.dataSource = self
         self.tableView.delegate = self

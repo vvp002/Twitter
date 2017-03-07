@@ -17,12 +17,18 @@ class ComposeTweetViewController: UIViewController, UITextViewDelegate {
     @IBOutlet weak var tweetTextView: UITextView!
     @IBOutlet weak var sendTweetButton: UIBarButtonItem!
     
+    @IBOutlet weak var navBar: UINavigationBar!
     var tweet: Tweet!
     var user: User!
     var text:String=""
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        //Change design and color of the view controller to make it look nicer
+        let skyBlue = UIColor(red: 0.0, green: 172.0/255.0, blue: 237.0/255.0, alpha: 1.0)
+        navBar.barTintColor = skyBlue
+        navBar.titleTextAttributes = [NSForegroundColorAttributeName: UIColor.white]
         
         tweetTextView.delegate = self
         nameLabel.text = String(describing: user.name!)
