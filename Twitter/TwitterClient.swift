@@ -98,4 +98,53 @@ class TwitterClient: BDBOAuth1SessionManager {
         
         NotificationCenter.default.post(name: NSNotification.Name(rawValue: User.userDidLogoutNotification), object: nil)
     }
+    
+    func retweet(tweetID: Int, success: @escaping (Tweet) -> (), failure: @escaping (Error)->()) {
+        post("1.1/statuses/retweet/\(tweetID).json", parameters: ["id": tweetID], progress: nil, success: { (task: URLSessionTask, response: Any?) in
+            
+            let tweetDictionary = response as! NSDictionary
+            let tweet = Tweet(dictionary: tweetDictionary)
+            success(tweet)
+            
+        }) { (task: URLSessionTask?, error: Error) in
+            failure(error)
+        }
+    }
+    
+    func unretweet(tweetID: Int, success: @escaping (Tweet) -> (), failure: @escaping (Error)->()) {
+        post("1.1/statuses/unretweet/\(tweetID).json", parameters: ["id": tweetID], progress: nil, success: { (task: URLSessionTask, response: Any?) in
+            
+            let tweetDictionary = response as! NSDictionary
+            let tweet = Tweet(dictionary: tweetDictionary)
+            success(tweet)
+            
+        }) { (task: URLSessionTask?, error: Error) in
+            failure(error)
+        }
+    }
+    
+    func favorite(tweetID: Int, success: @escaping (Tweet) -> (), failure: @escaping (Error)->()) {
+        post("https://api.twitter.com/1.1/favorites/create.json?id=" + String(tweetID), parameters: ["id": tweetID], progress: nil, success: { (task: URLSessionTask, response: Any?) in
+            
+            let tweetDictionary = response as! NSDictionary
+            let tweet = Tweet(dictionary: tweetDictionary)
+            success(tweet)
+            
+        }) { (task: URLSessionTask?, error: Error) in
+            failure(error)
+        }
+    }
+    func unfavorite(tweetID: Int, success: @escaping (Tweet) -> (), failure: @escaping (Error)->()) {
+        post("https://api.twitter.com/1.1/favorites/destroy.json?id=" + String(tweetID), parameters: ["id": tweetID], progress: nil, success: { (task: URLSessionTask, response: Any?) in
+            
+            let tweetDictionary = response as! NSDictionary
+            let tweet = Tweet(dictionary: tweetDictionary)
+            success(tweet)
+            
+        }) { (task: URLSessionTask?, error: Error) in
+            failure(error)
+        }
+    }
+    
+    
 }

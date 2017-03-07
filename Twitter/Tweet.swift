@@ -16,9 +16,10 @@ class Tweet: NSObject {
     var retweetCount:Int = 0
     var favoritesCount:Int = 0
     var profilePhotoUrl: URL?
-    var favorited: Bool?
-    var retweeted: Bool?
+    var favorited: Bool
+    var retweeted: Bool
     var tweetID: Int?
+    var user: User?
     
     init(dictionary: NSDictionary) {
         //Set the text field to have the contents of the text in the tweet
@@ -48,6 +49,10 @@ class Tweet: NSObject {
             formatter.dateFormat = "MM/dd/yy"
             timestamp = formatter.string(from: date as! Date)
         }
+        
+        tweetID = dictionary["id"] as? Int
+        retweeted = dictionary["favorited"] as! Bool
+        favorited = dictionary["retweeted"] as! Bool
     }
 
     //Add a tweet to the [NSDictionary] so you can display any new tweets

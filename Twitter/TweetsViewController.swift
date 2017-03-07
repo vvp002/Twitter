@@ -23,10 +23,12 @@ class TweetsViewController: UIViewController, UITableViewDelegate, UITableViewDa
         self.tableView.rowHeight = UITableViewAutomaticDimension
         self.tableView.estimatedRowHeight = 170
         
+        
         //Change design and color of the view controller to make it look nicer
         let skyBlue = UIColor(red: 0.0, green: 172.0/255.0, blue: 237.0/255.0, alpha: 1.0)
         self.navigationController?.navigationBar.barTintColor = skyBlue
         self.navigationController?.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName: UIColor.white]
+ 
         
         //Display the user's hometimeline unless error
         TwitterClient.sharedInstance?.homeTimeline(success: { (tweets: [Tweet]) -> () in
@@ -37,7 +39,18 @@ class TweetsViewController: UIViewController, UITableViewDelegate, UITableViewDa
             }, failure: { (error: Error) -> () in
             print("error: \(error.localizedDescription)")
         })
+ 
 
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        TwitterClient.sharedInstance?.homeTimeline(success: { (tweets: [Tweet]) -> () in
+            self.tweets = tweets
+            self.tableView.reloadData()
+        }, failure: { (error: Error) in
+            print(error.localizedDescription)
+        })
+        self.tableView.reloadData()
     }
 
     override func didReceiveMemoryWarning() {
@@ -75,7 +88,7 @@ class TweetsViewController: UIViewController, UITableViewDelegate, UITableViewDa
         cell.tweetTextLabel.text = tweet.text as String?
         cell.tweetTimestamp.text = tweet.timestamp as String?
         cell.tweetAuthorName.text = tweet.name as String?
-        cell.tweetAuthorProfilePic.setImageWith(tweet.profilePhotoUrl! as URL)
+        cell.tweetAuthorProfilePic.setImageFor(.normal, with: tweet.profilePhotoUrl! as URL)
         cell.retweetCount.text = String(tweet.retweetCount)
         cell.favoriteCount.text = String(tweet.favoritesCount)
         
@@ -129,10 +142,40 @@ class TweetsViewController: UIViewController, UITableViewDelegate, UITableViewDa
     // MARK: - Navigation
 
     // In a storyboard-based application, you will often want to do a little preparation before navigation
+ */
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         // Get the new view controller using segue.destinationViewController.
         // Pass the selected object to the new view controller.
+        
+        if segue.identifier == "tweetSegue"{
+            let vc = segue.destination as! TweetsDetailViewController
+            let indexPath = tableView.indexPath(for: sender as! UITableViewCell)
+            let tweet = tweets[(indexPath?.row)!]
+            vc.tweet = tweet
+            vc.user = tweet.user
+            let cell = sender as! UITableViewCell
+            cell.selectionStyle = .gray
+        }
+        else if segue.identifier == "profileSegue" {
+            let vc = segue.destination as! TimelineViewController
+            let button = sender as? UIButton
+            let cell = button?.superview?.superview as! UITableViewCell
+            let indexPath = tableView.indexPath(for: cell)
+            let tweet = tweets[(indexPath?.row)!]
+            vc.user = tweet.user
+        }
+        else if segue.identifier == "replySegue" {
+            let vc = segue.destination as! ComposeTweetViewController
+            if let button = sender as? UIButton {
+                let cell = button.superview?.superview as! UITableViewCell
+                let indexPath = tableView.indexPath(for: cell)
+                let tweet = tweets[(indexPath?.row)!]
+                vc.user = User.currentUser
+                vc.text = "@" + String(describing: tweet.name)
+            }
+        }
+        
     }
-    */
+ 
 
 }

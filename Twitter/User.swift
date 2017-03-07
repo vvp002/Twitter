@@ -17,6 +17,10 @@ class User: NSObject {
     
     var dictionary: NSDictionary?
     
+    var tweetCount: Int = 0
+    var followingCount: Int = 0
+    var followersCount: Int = 0
+    var backgroundUrl: URL?
     
     init(dictionary: NSDictionary) {
         //initialize the dictionary
@@ -33,6 +37,18 @@ class User: NSObject {
         }
         //Set the tweet text to the description of the tweet
         tagline = dictionary["description"] as? NSString
+        
+        let backgroundUrlStr = dictionary["profile_background_image_url_https"] as? String
+        if let backgroundUrlStr = backgroundUrlStr {
+            backgroundUrl = URL(string: backgroundUrlStr)
+        } else {
+            backgroundUrl = URL(string: "")
+        }
+        
+        tweetCount = (dictionary["statuses_count"] as? Int)!
+        followingCount = (dictionary["friends_count"] as? Int)!
+        followersCount = (dictionary["followers_count"] as? Int)!
+        
     }
     
     static var _currentUser: User?

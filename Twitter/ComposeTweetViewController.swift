@@ -17,23 +17,28 @@ class ComposeTweetViewController: UIViewController, UITextViewDelegate {
     @IBOutlet weak var tweetTextView: UITextView!
     @IBOutlet weak var sendTweetButton: UIBarButtonItem!
     
+    @IBOutlet weak var navigationBar: UINavigationBar!
+    
     var tweet: Tweet!
     var user: User!
+    var text:String=""
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        let skyBlue = UIColor(red: 0.0, green: 172.0/255.0, blue: 237.0/255.0, alpha: 1.0)
-        self.navigationController?.navigationBar.barTintColor = skyBlue
-        self.navigationController?.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName: UIColor.white]
         
         tweetTextView.delegate = self
         nameLabel.text = String(describing: user.name!)
-        tweetTextView.text = String("")
+        usernameLabel.text = "@" + String(describing: user.name!)
+        tweetTextView.text = text
         sendTweetButton.isEnabled = false
         
-        if let photoData = NSData(contentsOf: tweet.profilePhotoUrl! as URL) {
-            profilePhoto.setImageFor(.normal, with: tweet.profilePhotoUrl! as URL)
+        
+        if let photoData = NSData(contentsOf: user.profileUrl! as URL) {
+            profilePhoto.setImageFor(.normal, with: user.profileUrl! as URL)
+        }
+        
+        else {
+            profilePhoto.setImage( UIImage(named: "profile-Icon"), for: .normal)
         }
         
         // Do any additional setup after loading the view.
@@ -56,7 +61,7 @@ class ComposeTweetViewController: UIViewController, UITextViewDelegate {
     @IBAction func cancelTweet(_ sender: Any) {
         dismiss(animated: true, completion: nil)
     }
-
+    
     /*
     // MARK: - Navigation
 
@@ -66,7 +71,6 @@ class ComposeTweetViewController: UIViewController, UITextViewDelegate {
         // Get the new view controller using segue.destinationViewController.
         // Pass the selected object to the new view controller.
         
-        let text = tweetTextView.text!
         
     }
  
