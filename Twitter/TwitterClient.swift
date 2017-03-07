@@ -145,6 +145,30 @@ class TwitterClient: BDBOAuth1SessionManager {
             failure(error)
         }
     }
+    class func sendTweet(status: String, callBack: @escaping (_ response: Tweet?, _ error: Error?) -> Void) {
+        
+        guard let encoded = status.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)
+            else {
+                callBack(nil, nil)
+                return
+        }
+        let _ = TwitterClient.sharedInstance?.post("https://api.twitter.com/1.1/statuses/update.json?status=" + encoded, parameters: nil, progress: nil, success: { (URLSessionDataTask, response: Any?) in
+            
+            if let tweetDictionary = response as? [String: Any] {
+                let tweet = Tweet(dictionary: tweetDictionary as NSDictionary)
+                callBack(tweet, nil)
+            }
+            else {
+                callBack(nil, nil)
+            }
+            
+        }, failure: { (URLSessionDataTask, error: Error) in
+            print(error.localizedDescription)
+            callBack(nil, error)
+        })
+    }
+    
+
     
     
 }

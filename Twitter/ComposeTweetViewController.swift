@@ -74,7 +74,18 @@ class ComposeTweetViewController: UIViewController, UITextViewDelegate {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         // Get the new view controller using segue.destinationViewController.
         // Pass the selected object to the new view controller.
-        
+        let text = tweetTextView.text!
+        if segue.identifier == "backSegue" {
+            TwitterClient.sendTweet(status: text, callBack: { (tweet, error) in
+                self.tweetTextView.text = ""
+                self.tweetTextView.endEditing(true)
+            })
+            let vc = segue.destination as! TimelineViewController
+            vc.user = user
+            return
+        }
+        let vc = segue.destination as! TweetsDetailViewController
+        vc.user = user
         
     }
  
