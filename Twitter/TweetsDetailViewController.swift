@@ -16,13 +16,10 @@ class TweetsDetailViewController: UIViewController {
     @IBOutlet weak var timestampLabel: UILabel!
     @IBOutlet weak var retweetCountLabel: UILabel!
     @IBOutlet weak var favoriteCountLabel: UILabel!
-    
     @IBOutlet weak var profileImageButton: UIButton!
     @IBOutlet weak var replyButton: UIButton!
     @IBOutlet weak var retweetButton: UIButton!
     @IBOutlet weak var favoriteButton: UIButton!
-    
-    @IBOutlet weak var navigationBar: UINavigationBar!
     
     var tweet:Tweet!
     var user: User!
@@ -30,11 +27,6 @@ class TweetsDetailViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        /*
-        let skyBlue = UIColor(red: 0.0, green: 172.0/255.0, blue: 237.0/255.0, alpha: 1.0)
-        navigationBar.barTintColor = skyBlue
-        navigationBar.titleTextAttributes = [NSForegroundColorAttributeName: UIColor.white]
-        */
         
         nameLabel.text = tweet.name as String!
         usernameLabel.text = "@" + String(describing: tweet.name!)

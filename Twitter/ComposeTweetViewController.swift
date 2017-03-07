@@ -17,8 +17,6 @@ class ComposeTweetViewController: UIViewController, UITextViewDelegate {
     @IBOutlet weak var tweetTextView: UITextView!
     @IBOutlet weak var sendTweetButton: UIBarButtonItem!
     
-    @IBOutlet weak var navigationBar: UINavigationBar!
-    
     var tweet: Tweet!
     var user: User!
     var text:String=""
