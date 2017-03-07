@@ -21,12 +21,18 @@ class TweetsDetailViewController: UIViewController {
     @IBOutlet weak var retweetButton: UIButton!
     @IBOutlet weak var favoriteButton: UIButton!
     
+    @IBOutlet weak var navBar: UINavigationBar!
     var tweet:Tweet!
     var user: User!
     var tweetID: Int = 0
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        //Change design and color of the view controller to make it look nicer
+        let skyBlue = UIColor(red: 0.0, green: 172.0/255.0, blue: 237.0/255.0, alpha: 1.0)
+        navBar.barTintColor = skyBlue
+        navBar.titleTextAttributes = [NSForegroundColorAttributeName: UIColor.white]
         
         nameLabel.text = tweet.name as String!
         usernameLabel.text = "@" + String(describing: tweet.name!)

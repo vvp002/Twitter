@@ -8,7 +8,7 @@
 
 import UIKit
 
-class TimelineViewController: UIViewController {
+class TimelineViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
 
     @IBOutlet weak var profileImage: UIImageView!
     @IBOutlet weak var followingLabel: UILabel!
@@ -18,8 +18,23 @@ class TimelineViewController: UIViewController {
     var user: User!
     var tweets: [Tweet]!
     
+    @IBOutlet weak var tableView: UITableView!
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        self.tableView.dataSource = self
+        self.tableView.delegate = self
+        
+        let twitterClient  = TwitterClient.sharedInstance
+        twitterClient?.homeTimeline(success: { (tweets: [Tweet]) -> () in
+            self.tweets = tweets
+            
+            self.tableView.reloadData()
+            
+        }, failure: { (error: Error) -> () in
+            print("error: \(error.localizedDescription)")
+        })
+
 
         nameLabel.text = String(describing: user.name!)
         tweetsLabel.text = String(user.tweetCount)
@@ -29,8 +44,35 @@ class TimelineViewController: UIViewController {
         if user.profileUrl != URL(string: "") {
             profileImage.setImageWith(user.profileUrl! as URL)
         }
+        
         // Do any additional setup after loading the view.
         
+    }
+    
+    public func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int{
+        if let tweets = self.tweets{
+            return tweets.count
+        }
+        return 0
+    }
+    
+    public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell{
+        let cell = tableView.dequeueReusableCell(withIdentifier: "profileCell") as! ProfileTableViewCell
+        
+        //Get desired tweet from indexPath.row
+        let tweet = tweets[indexPath.row]
+        
+        //Instantiate the cell contents with that of the corresponding parts in the
+        //tweet
+        cell.nameLabel.text = tweet.name as String?
+        cell.usernameLabel.text = tweet.name as String?
+        cell.tweetText.text = tweet.text as String?
+        cell.retweetCount.text = String(tweet.retweetCount)
+        cell.favoriteCount.text = String(tweet.favoritesCount)
+        cell.timestampLabel.text = tweet.timestamp as String?
+        cell.profileImage.setImageFor(.normal, with: tweet.profilePhotoUrl! as URL)
+
+        return cell
     }
     
     @IBAction func backButtonPressed(_ sender: Any) {
